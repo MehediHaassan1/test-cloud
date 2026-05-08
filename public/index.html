@@ -25,10 +25,10 @@
 					class="border p-2 rounded-lg"
 				/>
 				<button
-					onclick="createUser()"
+					onclick="createOrUpdateUser()"
 					class="bg-blue-600 text-white rounded-lg p-2 hover:bg-blue-700"
 				>
-					Add User
+					Save User
 				</button>
 			</div>
 
@@ -50,6 +50,7 @@
 
 		<script>
 			const API = "/api/users";
+			let editingUserId = null;
 
 			async function fetchUsers() {
 				const res = await fetch(API);
@@ -60,27 +61,44 @@
 
 				data.forEach((user) => {
 					table.innerHTML += `
-      <tr class='text-center'>
-        <td class='border p-2'>${user.id}</td>
-        <td class='border p-2'>${user.name}</td>
-        <td class='border p-2'>${user.email}</td>
-        <td class='border p-2'>
-          <button onclick="deleteUser(${user.id})" class='bg-red-500 text-white px-2 py-1 rounded'>Delete</button>
-        </td>
-      </tr>
-    `;
+					<tr class='text-center'>
+						<td class='border p-2'>${user.id}</td>
+						<td class='border p-2'>${user.name}</td>
+						<td class='border p-2'>${user.email}</td>
+						<td class='border p-2 space-x-2'>
+							<button onclick="editUser(${user.id}, '${user.name}', '${user.email}')" class='bg-yellow-500 text-white px-2 py-1 rounded'>Edit</button>
+							<button onclick="deleteUser(${user.id})" class='bg-red-500 text-white px-2 py-1 rounded'>Delete</button>
+						</td>
+					</tr>
+				`;
 				});
 			}
 
-			async function createUser() {
+			function editUser(id, name, email) {
+				document.getElementById("name").value = name;
+				document.getElementById("email").value = email;
+				editingUserId = id;
+			}
+
+			async function createOrUpdateUser() {
 				const name = document.getElementById("name").value;
 				const email = document.getElementById("email").value;
 
-				await fetch(API, {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ name, email }),
-				});
+				if (editingUserId) {
+					await fetch(`${API}/${editingUserId}`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ name, email }),
+					});
+
+					editingUserId = null;
+				} else {
+					await fetch(API, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ name, email }),
+					});
+				}
 
 				document.getElementById("name").value = "";
 				document.getElementById("email").value = "";
