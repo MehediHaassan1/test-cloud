@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import path from "path";
+import router from "./routes/user.router";
 
 const app = express();
 
@@ -25,5 +26,7 @@ app.get("/api/error", (req: Request, res: Response) => {
 		error: "This is a simulated error response.",
 	});
 });
+
+app.use("/api/users", router);
 
 export default app;
