@@ -29,4 +29,10 @@ app.get("/api/error", (req: Request, res: Response) => {
 
 app.use("/api/users", router);
 
+app.get("/health", (req: Request, res: Response) => {
+	res.status(200).json({
+		status: "OK",
+	});
+});
+
 export default app;

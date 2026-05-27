@@ -1,4 +1,8 @@
-CREATE SCHEMA IF NOT EXISTS app_users;
+CREATE DATABASE IF NOT EXISTS 'test-app';
+
+USE 'test-app';
+
+CREATE SCHEMA IF NOT EXISTS 'test-app'.app_users;
 
 CREATE TABLE IF NOT EXISTS app_users.users (
     id SERIAL PRIMARY KEY,

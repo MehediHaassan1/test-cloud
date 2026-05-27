@@ -26,4 +26,9 @@ app.get("/api/error", (req, res) => {
     });
 });
 app.use("/api/users", user_router_1.default);
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+    });
+});
 exports.default = app;
