@@ -8,4 +8,7 @@ exports.pool = new pg_1.Pool({
     user: "postgres",
     password: "123456",
     database: "test-app",
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
